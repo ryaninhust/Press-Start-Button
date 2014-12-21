@@ -7,6 +7,7 @@ import pandas as pd
 
 def create_nor_data(image_path,x_size,y_size):
     data = []
+
     for infile in glob.glob(image_path):
         print infile
         file, ext = os.path.splitext(infile)
@@ -20,6 +21,7 @@ def create_nor_data(image_path,x_size,y_size):
         image_data.append(im.size[1])
         image_data.append(y)
         data.append(image_data)
+
     return pd.DataFrame(data)
 
 #data_output = pd.DataFrame(data)
