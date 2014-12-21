@@ -1,0 +1,9 @@
+GraphLab-Create==1.1
+ipython==2.3.1
+matplotlib==1.4.2
+numpy==1.7.1
+pandas==0.12.0
+scikit-image==0.10.1
+scikit-learn==0.15.2
+scipy==0.14.0
+virtualenv==1.11.6
