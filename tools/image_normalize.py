@@ -3,29 +3,30 @@
 
 from PIL import Image, ImageOps
 import glob, os
-import pandas as pd
+import numpy as np
 
-def create_nor_data(image_path,x_size,y_size):
+def create_nor_data(image_path, x_size, y_size, normalize = False):
     data = []
 
     for infile in glob.glob(image_path):
         print infile
-        file, ext = os.path.splitext(infile)
-        y = file.split('_')[1]
+        y = os.path.basename(infile).split('.')[0].split('_')[1]
         im = Image.open(infile)
         thumb = ImageOps.fit(im, (x_size,y_size), Image.ANTIALIAS)
-        outfile = 'image/nor/'+ file.split('/')[1] + '/' + file.split('/')[2]
-        thumb.save(outfile,'JPEG')
-        image_data = [l[0]/255.0 for l in list(thumb.getdata())]
-        image_data.append(im.size[0])
-        image_data.append(im.size[1])
-        image_data.append(y)
+        #outfile = 'image/nor/'+ infile.split('/')[1] + '/' + infile.split('/')[2]
+        #thumb.save(outfile,'JPEG')
+        if normalize:
+            image_data = [1 if l[0]/255.0 > 0 else 0 for l in list(thumb.getdata())]
+        else:
+            image_data = [l[0]/255.0 for l in list(thumb.getdata())]
+        image_data.append(int(y))
         data.append(image_data)
 
-    return pd.DataFrame(data)
+    data_m = np.matrix(data)
+    data_x = data_m[:, :-1]
+    data_y = np.array(data_m[:, -1]).T[0]
+    return data_x, data_y
 
-#data_output = pd.DataFrame(data)
-#data_output.to_csv('data/train_nor_30.txt', index=False, header=False)
 
 
 
